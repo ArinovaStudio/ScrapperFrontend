@@ -5,15 +5,16 @@ import { useAppContext } from '../context/ContextProvider.jsx';
 
 const Index = () => {
   const {data, setData} = useAppContext();
-
+  const [loading, setLoading] = useState(false)
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     const form = e.target;
     const type = form.type.value;
     const location = form.location.value;
     const limit = form.limit.value;
 
-    const response = await fetch("http://localhost:8000/scrap", {
+    const response = await fetch(`${process.env.VITE_BACKEND_ORIGIN}/scrap`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,8 +24,8 @@ const Index = () => {
 
     const places = await response.json();
     setData(places.results);
+    setLoading(false)
   };
-  console.log(data);
   return (
     <div className="grid grid-cols-2 h-screen">
         <div className="flex flex-col items-center justify-center p-10 from-gray-50 to-gray-100 min-h-screen border-r border-gray-200">
@@ -85,7 +86,7 @@ const Index = () => {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
             >
-              Start Scraping
+              {loading ? "Loading..." : "Start Scraping"}
             </button>
           </form>
         </div>
