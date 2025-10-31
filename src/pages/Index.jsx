@@ -6,6 +6,7 @@ import { useAppContext } from '../context/ContextProvider.jsx';
 const Index = () => {
   const {data, setData} = useAppContext();
   const [loading, setLoading] = useState(false)
+  const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
@@ -14,7 +15,7 @@ const Index = () => {
     const location = form.location.value;
     const limit = form.limit.value;
 
-    const response = await fetch(`${process.env.VITE_BACKEND_ORIGIN}/scrap`, {
+    const response = await fetch(`${backendOrigin}/scrap`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,6 +25,7 @@ const Index = () => {
 
     const places = await response.json();
     setData(places.results);
+    console.log(response)
     setLoading(false)
   };
   return (
